@@ -26,7 +26,7 @@ export interface AutoCompleteDetails {
 
 export default async function getAutoCompleteDetails(
   address: string,
-  countryCode: string | undefined
+  countryCode: string
 ): Promise<AutoCompleteDetails[]> {
   const apiKey: string | undefined = process.env.TOMTOM_API_KEY;
 

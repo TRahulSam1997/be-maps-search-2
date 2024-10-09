@@ -16,6 +16,8 @@ describe("Tomtom Places E2E Tests", () => {
     it("returns a promise", () => {
       const res = getAutoCompleteDetails(
         "Charlotte Street",
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
+        // @ts-ignore
         process.env.COUNTRY_CODE
       );
       expect(res).toBeInstanceOf(Promise);
@@ -24,6 +26,8 @@ describe("Tomtom Places E2E Tests", () => {
     it("can fetch from the autocomplete api", async () => {
       const res = await getAutoCompleteDetails(
         "Charlotte Street",
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
+        // @ts-ignore
         process.env.COUNTRY_CODE
       );
       const firstRes = res[0];
@@ -39,6 +43,8 @@ describe("Tomtom Places E2E Tests", () => {
     it("can fetch from the autocomplete api results", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
         "Charlotte Street",
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
+        // @ts-ignore
         process.env.COUNTRY_CODE
       );
       const firstRes = res[1];
@@ -53,6 +59,8 @@ describe("Tomtom Places E2E Tests", () => {
     it("fetches only places from Australia", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
         "Charlotte Street",
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
+        // @ts-ignore
         process.env.COUNTRY_CODE
       );
 
