@@ -35,4 +35,7 @@ API Key: <redacted>
 
 ## Notes from candidate (Rahul Samaranayake) for reviewers
 
-I noticed the bug on getPlaceAutocomplete()
+- I noticed the bug on getPlaceAutocomplete() where it was sending only a destructured object value for placeId.
+- I've added additional tests to cover the payload content. However, since this TomTom endpoint seems non-deterministic I'm unsure how stable the tests will be.
+- I've added interfaces to make the code type-safe.
+- getAutoCompleteDetails() has been updated so that the client can pass the country code.

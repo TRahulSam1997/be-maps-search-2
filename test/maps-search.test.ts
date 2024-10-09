@@ -1,10 +1,11 @@
 import { config } from "dotenv";
 import { describe } from "@jest/globals";
 import { getPlaceAutocomplete } from "../src/maps-api";
-import { AutoCompleteDetails, getAutoCompleteDetails } from "../src";
+import getAutoCompleteDetails, { AutoCompleteDetails } from "../src";
 
 config();
 
+// Random number generator to make tests more realistic/robust
 const getRandomNumberBetween1And10 = (): number => {
   return Math.floor(Math.random() * 10) + 1;
 };
@@ -13,12 +14,18 @@ const getRandomNumberBetween1And10 = (): number => {
 describe("Tomtom Places E2E Tests", () => {
   describe("getAutoCompleteDetails", () => {
     it("returns a promise", () => {
-      const res = getAutoCompleteDetails("Charlotte Street");
+      const res = getAutoCompleteDetails(
+        "Charlotte Street",
+        process.env.COUNTRY_CODE
+      );
       expect(res).toBeInstanceOf(Promise);
     });
 
     it("can fetch from the autocomplete api", async () => {
-      const res = await getAutoCompleteDetails("Charlotte Street");
+      const res = await getAutoCompleteDetails(
+        "Charlotte Street",
+        process.env.COUNTRY_CODE
+      );
       const firstRes = res[0];
 
       expect(firstRes).toHaveProperty("placeId");
@@ -31,7 +38,8 @@ describe("Tomtom Places E2E Tests", () => {
 
     it("can fetch from the autocomplete api results", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
-        "Charlotte Street"
+        "Charlotte Street",
+        process.env.COUNTRY_CODE
       );
       const firstRes = res[1];
 
@@ -44,7 +52,8 @@ describe("Tomtom Places E2E Tests", () => {
 
     it("fetches only places from Australia", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
-        "Charlotte Street"
+        "Charlotte Street",
+        process.env.COUNTRY_CODE
       );
 
       const firstRes = res[getRandomNumberBetween1And10()];
@@ -55,9 +64,23 @@ describe("Tomtom Places E2E Tests", () => {
   });
 
   describe("getPlaceAutocomplete", () => {
+    it("handles Australian results", async () => {
+      const res = await getPlaceAutocomplete(
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
+        // @ts-ignore
+        process.env.TOMTOM_API_KEY,
+        "Charlotte Street",
+        process.env.COUNTRY_CODE
+      );
+      expect(res).not.toStrictEqual([]);
+      expect(res[getRandomNumberBetween1And10()].address.country).toBe(
+        "Australia"
+      );
+    });
+
     it("handles no results", async () => {
       const res = await getPlaceAutocomplete(
-        // Ignoring type error since this is a test and handled in function
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
         // @ts-ignore
         process.env.TOMTOM_API_KEY,
         "asfasffasfasafsafs",
@@ -68,7 +91,7 @@ describe("Tomtom Places E2E Tests", () => {
 
     it("handles error", async () => {
       expect(
-        // Ignoring type error since this is a test and handled in function
+        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
         // @ts-ignore
         getPlaceAutocomplete(process.env.TOMTOM_API_KEY, "")
       ).rejects.toThrow();

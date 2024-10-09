@@ -24,11 +24,11 @@ export interface AutoCompleteDetails {
   municipality: string;
 }
 
-export async function getAutoCompleteDetails(
-  address: string
+export default async function getAutoCompleteDetails(
+  address: string,
+  countryCode: string | undefined
 ): Promise<AutoCompleteDetails[]> {
   const apiKey: string | undefined = process.env.TOMTOM_API_KEY;
-  const countryCode: string | undefined = process.env.COUNTRY_CODE;
 
   if (!apiKey) {
     return Promise.reject(new Error("API key is missing."));
