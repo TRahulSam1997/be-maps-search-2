@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "types": ["node","jest"],
+    "types": ["node", "jest"],
     "target": "es6",
     "module": "commonjs",
     "outDir": "dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react"
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
