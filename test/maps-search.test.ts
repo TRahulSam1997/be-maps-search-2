@@ -11,27 +11,20 @@ const getRandomNumberBetween1And10 = (): number => {
   return Math.floor(Math.random() * 10) + 1;
 };
 
+const countryCode = process.env.COUNTRY_CODE || "defaultCountryCode";
+
 // These are end-to-end tests and need an api key
 describe("Tomtom Places E2E Tests", () => {
   describe("getAutoCompleteDetails", () => {
-    it("returns a promise", () => {
-      const res = getAutoCompleteDetails(
-        "Charlotte Street",
-        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
-        // @ts-ignore
-        process.env.COUNTRY_CODE
-      );
+    it("returns a promise", async () => {
+      const res = getAutoCompleteDetails("Charlotte Street", countryCode);
+      expect((await res).length).toBeGreaterThan(0);
       expect(res).toBeInstanceOf(Promise);
     });
 
     it("can fetch from the autocomplete api", async () => {
-      const res = await getAutoCompleteDetails(
-        "Charlotte Street",
-        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
-        // @ts-ignore
-        process.env.COUNTRY_CODE
-      );
-      const firstRes = res[0];
+      const res = await getAutoCompleteDetails("Charlotte Street", countryCode);
+      const firstRes = res[getRandomNumberBetween1And10()];
 
       expect(firstRes).toHaveProperty("placeId");
       expect(firstRes).toHaveProperty("streetNumber");
@@ -44,11 +37,9 @@ describe("Tomtom Places E2E Tests", () => {
     it("can fetch from the autocomplete api results", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
         "Charlotte Street",
-        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
-        // @ts-ignore
-        process.env.COUNTRY_CODE
+        countryCode
       );
-      const firstRes = res[1];
+      const firstRes = res[getRandomNumberBetween1And10()];
 
       // The reason for checking a negation is because fuzzy-search is non-deterministic and can make tests flakey
       expect(firstRes.placeId).not.toBe("");
@@ -60,9 +51,7 @@ describe("Tomtom Places E2E Tests", () => {
     it("fetches only places from Australia", async () => {
       const res: AutoCompleteDetails[] = await getAutoCompleteDetails(
         "Charlotte Street",
-        // Ignoring type error since this is a test and handled in getAutoCompleteDetails() function
-        // @ts-ignore
-        process.env.COUNTRY_CODE
+        countryCode
       );
 
       const firstRes = res[getRandomNumberBetween1And10()];
@@ -71,9 +60,14 @@ describe("Tomtom Places E2E Tests", () => {
       expect(firstRes.country).toBe("Australia");
     });
 
-    // This test might be superfluous.
+    // These tests might be superfluous.
+
     it("returns a rejected promise with a falsy check", async () => {
       expect(getAutoCompleteDetails("", "")).rejects.toThrow();
+    });
+
+    it("returns a rejected promise for invalid input", async () => {
+      expect(getAutoCompleteDetails("", countryCode)).rejects.toThrow();
     });
   });
 
@@ -84,7 +78,7 @@ describe("Tomtom Places E2E Tests", () => {
         // @ts-ignore
         process.env.TOMTOM_API_KEY,
         "Charlotte Street",
-        process.env.COUNTRY_CODE
+        countryCode
       );
       expect(res).not.toStrictEqual([]);
       expect(res[getRandomNumberBetween1And10()].address.country).toBe(
@@ -98,7 +92,7 @@ describe("Tomtom Places E2E Tests", () => {
         // @ts-ignore
         process.env.TOMTOM_API_KEY,
         "asfasffasfasafsafs",
-        process.env.COUNTRY_CODE
+        countryCode
       );
       expect(res).toStrictEqual([]);
     });
