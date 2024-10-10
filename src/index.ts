@@ -34,6 +34,10 @@ export default async function getAutoCompleteDetails(
     return Promise.reject(new Error("API key is missing."));
   }
 
+  if (!address) {
+    return Promise.reject(new Error("Address is missing."));
+  }
+
   if (!countryCode) {
     return Promise.reject(new Error("Country code is missing."));
   }

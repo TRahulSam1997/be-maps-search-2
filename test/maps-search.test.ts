@@ -69,6 +69,11 @@ describe("Tomtom Places E2E Tests", () => {
       expect(firstRes.countryCode).toBe("AU");
       expect(firstRes.country).toBe("Australia");
     });
+
+    // This test might be superfluous.
+    it("returns a rejected promise with a falsy check", async () => {
+      expect(getAutoCompleteDetails("", "")).rejects.toThrow();
+    });
   });
 
   describe("getPlaceAutocomplete", () => {
