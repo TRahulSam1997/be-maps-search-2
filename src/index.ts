@@ -1,28 +1,5 @@
 import { getPlaceAutocomplete } from "./maps-api";
-
-interface Address {
-  streetName: string;
-  streetNumber?: string;
-  countryCode: string;
-  country: string;
-  freeformAddress: string;
-  municipality: string;
-}
-
-interface AutoCompleteResult {
-  id: string;
-  address: Address;
-}
-
-export interface AutoCompleteDetails {
-  placeId: string;
-  streetName: string;
-  streetNumber: string;
-  countryCode: string;
-  country: string;
-  freeformAddress: string;
-  municipality: string;
-}
+import { AutoCompleteDetails, AutoCompleteResult } from "./types/autoComplete";
 
 export default async function getAutoCompleteDetails(
   address: string,
