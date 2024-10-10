@@ -20,21 +20,18 @@ export default async function getAutoCompleteDetails(
   }
 
   try {
-    const res: AutoCompleteDetails[] = await getPlaceAutocomplete(
-      apiKey,
-      address,
-      countryCode
-    ).then(async (autocompleteResults: AutoCompleteResult[]) => {
-      return autocompleteResults.map((result) => ({
-        placeId: result.id || "",
-        streetName: result.address.streetName || "",
-        streetNumber: result.address.streetNumber || "",
-        countryCode: result.address.countryCode || "",
-        country: result.address.country || "",
-        freeformAddress: result.address.freeformAddress || "",
-        municipality: result.address.municipality || "",
-      }));
-    });
+    const autocompleteResults: AutoCompleteResult[] =
+      await getPlaceAutocomplete(apiKey, address, countryCode);
+
+    const res: AutoCompleteDetails[] = autocompleteResults.map((result) => ({
+      placeId: result.id || "",
+      streetName: result.address.streetName || "",
+      streetNumber: result.address.streetNumber || "",
+      countryCode: result.address.countryCode || "",
+      country: result.address.country || "",
+      freeformAddress: result.address.freeformAddress || "",
+      municipality: result.address.municipality || "",
+    }));
 
     return res;
   } catch (err) {
